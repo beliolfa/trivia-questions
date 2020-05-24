@@ -1,0 +1,26 @@
+{
+  "name": "trivia-questions",
+  "version": "1.0.0",
+  "description": "A random question generator for trivia games",
+  "author": "Javier Martinez",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.10.3",
+    "google-translate-api-browser": "^1.1.71",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^1.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-nuxt": "^0.5.2",
+    "eslint-plugin-prettier": "^3.1.3"
+  }
+}
