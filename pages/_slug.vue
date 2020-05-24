@@ -103,11 +103,13 @@ export default {
       return
     }
 
-    const translatedQuestion = await this.$translate(question.question, { to: 'es' })
-    const translatedCorectAnswer = await this.$translate(question.correct_answer, { to: 'es' })
+    const to = this.language
+
+    const translatedQuestion = await this.$translate(question.question, { to })
+    const translatedCorectAnswer = await this.$translate(question.correct_answer, { to })
 
     for (let answer of question.incorrect_answers) {
-      const translatedIncorectAnswer = await this.$translate(answer, { to: 'es' })
+      const translatedIncorectAnswer = await this.$translate(answer, { to })
       this.incorrect_answers.push(translatedIncorectAnswer.text)
     }
 
