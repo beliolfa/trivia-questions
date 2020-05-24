@@ -55,7 +55,7 @@
 
 <script>
 import Loading from '@/components/Loading'
-
+const he = require('he')
 export default {
   name: 'TriviaQuestion',
 
@@ -67,7 +67,7 @@ export default {
       loading: true,
       showHints: false,
       revealSolution: false,
-      question: '',
+      rawQuestion: '',
       incorrect_answers: [],
       correct_answer: '',
       categories: {
@@ -85,6 +85,10 @@ export default {
     answers() {
       return [...this.incorrect_answers, this.correct_answer].sort(() => Math.random() - 0.5)
     },
+
+    question() {
+      return he.decode(this.rawQuestion)
+    },
   },
 
   async created() {
@@ -96,7 +100,7 @@ export default {
     const question = response.results[0]
 
     if (this.language === 'en') {
-      this.question = question.question
+      this.rawQuestion = question.question
       this.correct_answer = question.correct_answer
       this.incorrect_answers = question.incorrect_answers
       this.loading = false
@@ -113,7 +117,7 @@ export default {
       this.incorrect_answers.push(translatedIncorectAnswer.text)
     }
 
-    this.question = translatedQuestion.text
+    this.rawQuestion = translatedQuestion.text
     this.correct_answer = translatedCorectAnswer.text
     this.loading = false
   },

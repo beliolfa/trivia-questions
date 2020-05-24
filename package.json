@@ -13,6 +13,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.10.3",
     "google-translate-api-browser": "^1.1.71",
+    "he": "^1.2.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {
