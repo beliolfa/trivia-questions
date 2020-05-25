@@ -63,7 +63,7 @@ export default {
 
   data() {
     return {
-      language: 'en',
+      language: 'es',
       loading: true,
       showHints: false,
       revealSolution: false,
@@ -92,12 +92,9 @@ export default {
   },
 
   async created() {
-    const category = this.categories[this.$route.params.slug]
-    const id = category[Math.floor(Math.random() * category.length)]
-    const response = await this.$axios.$get(
-      `https://opentdb.com/api.php?amount=1&category=${id}&difficulty=easy&type=multiple`
-    )
-    const question = response.results[0]
+    const slug = this.categories[this.$route.params.slug]
+    const category = slug[Math.floor(Math.random() * slug.length)]
+    const question = await this.$fetchQuestions({ category })
 
     if (this.language === 'en') {
       this.rawQuestion = question.question
@@ -109,16 +106,14 @@ export default {
 
     const to = this.language
 
-    const translatedQuestion = await this.$translate(question.question, { to })
-    const translatedCorectAnswer = await this.$translate(question.correct_answer, { to })
+    this.rawQuestion = await this.$translate(question.question, { to })
+    this.correct_answer = await this.$translate(question.correct_answer, { to })
 
     for (let answer of question.incorrect_answers) {
       const translatedIncorectAnswer = await this.$translate(answer, { to })
-      this.incorrect_answers.push(translatedIncorectAnswer.text)
+      this.incorrect_answers.push(translatedIncorectAnswer)
     }
 
-    this.rawQuestion = translatedQuestion.text
-    this.correct_answer = translatedCorectAnswer.text
     this.loading = false
   },
 

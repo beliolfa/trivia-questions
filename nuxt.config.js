@@ -27,7 +27,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/translate'],
+  plugins: ['~/plugins/translate', '~/plugins/questions'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -38,9 +38,15 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/dotenv'],
   /*
    ** Build configuration
    */
-  build: {},
+  build: {
+    extend: function(config) {
+      config.node = {
+        fs: 'empty',
+      }
+    },
+  },
 }
