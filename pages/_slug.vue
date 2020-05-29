@@ -7,7 +7,7 @@
       <h2
         class="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10"
       >
-        {{ question }}
+        {{ question.question }}
       </h2>
       <div class="mt-8 flex">
         <div class="inline-flex rounded-md shadow">
@@ -20,6 +20,7 @@
         </div>
         <div class="ml-3 inline-flex">
           <div
+            v-if="question.options"
             class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-indigo-700 bg-indigo-100 hover:text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:shadow-outline focus:border-indigo-300 transition duration-150 ease-in-out cursor-pointer"
             @click="showHints = !showHints"
           >
@@ -32,7 +33,7 @@
           <li v-for="(answer, index) in answers" :key="index" class="border-t border-gray-200">
             <div
               class="block hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out"
-              :class="{ 'bg-green-500 text-white': correct_answer == answer && revealSolution }"
+              :class="{ 'bg-green-500 text-white': question.answer == answer && revealSolution }"
             >
               <div class="flex items-center px-4 py-4 sm:px-6">
                 <div class="min-w-0 flex-1 flex items-center">
@@ -54,8 +55,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import Loading from '@/components/Loading'
-const he = require('he')
+
 export default {
   name: 'TriviaQuestion',
 
@@ -63,61 +65,29 @@ export default {
 
   data() {
     return {
-      language: 'es',
+      question: {},
       loading: true,
       showHints: false,
       revealSolution: false,
-      rawQuestion: '',
-      incorrect_answers: [],
-      correct_answer: '',
-      categories: {
-        geography: [22],
-        history: [23],
-        entertaiment: [10, 11, 12, 13, 14, 15, 16],
-        art: [25],
-        science: [17],
-        sports: [21],
-      },
     }
   },
 
   computed: {
     answers() {
-      return [...this.incorrect_answers, this.correct_answer].sort(() => Math.random() - 0.5)
-    },
-
-    question() {
-      return he.decode(this.rawQuestion)
+      return this.question.options || [this.question.answer]
     },
   },
 
   async created() {
-    const slug = this.categories[this.$route.params.slug]
-    const category = slug[Math.floor(Math.random() * slug.length)]
-    const question = await this.$fetchQuestions({ category })
-
-    if (this.language === 'en') {
-      this.rawQuestion = question.question
-      this.correct_answer = question.correct_answer
-      this.incorrect_answers = question.incorrect_answers
-      this.loading = false
-      return
-    }
-
-    const to = this.language
-
-    this.rawQuestion = await this.$translate(question.question, { to })
-    this.correct_answer = await this.$translate(question.correct_answer, { to })
-
-    for (let answer of question.incorrect_answers) {
-      const translatedIncorectAnswer = await this.$translate(answer, { to })
-      this.incorrect_answers.push(translatedIncorectAnswer)
-    }
-
+    this.question = await this.getRandomQuestionsBySlug(this.$route.params.slug)
     this.loading = false
   },
 
   methods: {
+    ...mapActions({
+      getRandomQuestionsBySlug: 'questions/getRandomQuestionsBySlug',
+    }),
+
     reveal() {
       this.revealSolution = true
       this.showHints = true

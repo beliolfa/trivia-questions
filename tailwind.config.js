@@ -6,6 +6,8 @@
  */
 module.exports = {
   theme: {},
-  variants: {},
+  variants: {
+    boxShadow: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
+  },
   plugins: [],
 }
