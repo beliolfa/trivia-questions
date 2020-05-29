@@ -88,3 +88,7 @@ sw.*
 
 # Vim swap files
 *.swp
+
+#scrapper
+pages/html.js
+pages/scrapper.vue
