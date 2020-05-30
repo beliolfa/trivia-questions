@@ -1,6 +1,8 @@
 export default {
   openTriviaIds: state => state.categories.flatMap(category => category.openTriviaIds),
 
+  categories: state => state.categories.filter(category => category.kids === state.kidsMode),
+
   activeQuestions: state => {
     const kidsModeFilter = state.kidsMode
       ? question => question.difficulty === 'kids'

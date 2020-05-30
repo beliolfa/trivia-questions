@@ -16,8 +16,7 @@
           >
             <div v-if="!revealSolution" class="px-5 py-3" @click="reveal">Ver Solución</div>
             <div v-else class="px-5 py-3" :class="category.color" @click="setQuestion">
-              <span>Cargar otra pregunta de</span>
-              <CategoryName :category="category" />
+              Cargar otra pregunta de {{ category.name }}
             </div>
           </div>
         </div>
@@ -61,12 +60,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import Loading from '@/components/Loading'
 import ResetCategory from '@/components/ResetCategory'
-import CategoryName from '@/components/CategoryName'
 
 export default {
   name: 'TriviaQuestion',
 
-  components: { Loading, ResetCategory, CategoryName },
+  components: { Loading, ResetCategory },
 
   data() {
     return {

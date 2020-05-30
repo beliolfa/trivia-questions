@@ -71,7 +71,7 @@ export default {
   },
 
   async setQuestionByCategory({ commit, state }, category) {
-    const cat = state.categories.find(c => c.openTriviaIds.includes(category))
+    const cat = state.categories.find(c => c.openTriviaIds && c.openTriviaIds.includes(category))
     const questions = await this.$fetchQuestions({ category, amount: 50 })
     commit(
       SET_QUESTIONS,

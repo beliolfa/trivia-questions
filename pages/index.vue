@@ -20,7 +20,7 @@
                 <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                   <div>
                     <div class="text-sm leading-5 font-medium text-indigo-600 truncate">
-                      <CategoryName :category="category" />
+                      {{ category.name }}
                     </div>
                   </div>
                 </div>
@@ -34,16 +34,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import CategoryName from '@/components/CategoryName'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TriviaQuestions',
 
-  components: { CategoryName },
   computed: {
-    ...mapState({
-      categories: state => state.questions.categories,
+    ...mapGetters({
+      categories: 'questions/categories',
     }),
   },
 }
