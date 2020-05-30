@@ -1,19 +1,24 @@
-import { SET_QUESTIONS } from './mutation-types'
+import {
+  SET_QUESTIONS,
+  SET_ACTIVE_CATEGORY,
+  SET_KIDS_MODE,
+  MARK_QUESTION_AS_DONE,
+  RESET_CURRENT_CATEGORY,
+} from './mutation-types'
 const he = require('he')
 
 export default {
-  async getRandomQuestionsBySlug({ state }, slug) {
-    const questions = state.questions
-      .filter(question => !question.answered && question.category === slug)
-      .slice()
-      .sort(() => Math.random() - 0.5)
+  async getRandomQuestion({ state, getters, dispatch }) {
+    if (!getters.activeQuestions.length && !state.kidsMode) {
+      // Get another batch from Open Trivia
+      await dispatch('setOpenTriviaQuestionsBySlug', state.activeCategory)
+    }
 
-    // if (!questions.length) {
-    //   dispatch(setQuestionByCategory, category)
-    //   // if still no results, mark as unanswered the old ones
-    // }
+    const question = getters.activeQuestions[0]
 
-    const question = questions[0]
+    if (!question) {
+      return null
+    }
 
     if (question.language === 'es') {
       return question
@@ -55,6 +60,16 @@ export default {
     }
   },
 
+  async setOpenTriviaQuestionsBySlug({ dispatch, state }, slug) {
+    const categories = state.categories
+      .filter(c => c.slug === slug)
+      .flatMap(question => question.openTriviaIds)
+
+    for (let category of categories) {
+      await dispatch('setQuestionByCategory', category)
+    }
+  },
+
   async setQuestionByCategory({ commit, state }, category) {
     const cat = state.categories.find(c => c.openTriviaIds.includes(category))
     const questions = await this.$fetchQuestions({ category, amount: 50 })
@@ -83,5 +98,21 @@ export default {
   async setQuestions({ dispatch }) {
     await dispatch('setFirebaseQuestions')
     await dispatch('setOpenTriviaQuestions')
+  },
+
+  markQuestionAsDone({ commit }, question) {
+    commit(MARK_QUESTION_AS_DONE, question)
+  },
+
+  setActiveCategory({ commit }, category) {
+    commit(SET_ACTIVE_CATEGORY, category)
+  },
+
+  setKidsMode({ commit }, value) {
+    commit(SET_KIDS_MODE, value)
+  },
+
+  resetCurrentCategory({ commit }) {
+    commit(RESET_CURRENT_CATEGORY)
   },
 }

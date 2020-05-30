@@ -1,16 +1,22 @@
 <template>
-  <div class="loader">Loading...</div>
+  <div class="loader" :class="color.replace('bg', 'text')">Loading...</div>
 </template>
 
 <script>
 export default {
   name: 'Loading',
+
+  props: {
+    color: {
+      type: String,
+      default: 'text-indigo-500',
+    },
+  },
 }
 </script>
 
 <style scoped>
 .loader {
-  color: rgb(90, 103, 216);
   font-size: 90px;
   text-indent: -9999em;
   overflow: hidden;

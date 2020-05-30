@@ -1,55 +1,52 @@
 <template>
-  <div>
-    <nuxt />
+  <div class="flex flex-col items-center">
+    <div class="w-screen p-8 md:flex md:items-center md:justify-between">
+      <div class="flex-1 min-w-0">
+        <h2
+          class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:leading-9 sm:truncate cursor-pointer"
+          @click="$router.push('/')"
+        >
+          Trivia Questions
+        </h2>
+      </div>
+      <div class="mt-4 flex md:mt-0 md:ml-4">
+        <KidsToggle />
+      </div>
+    </div>
+    <div class="max-w-xl p-8">
+      <nuxt />
+    </div>
   </div>
 </template>
+<script>
+import { mapState, mapActions } from 'vuex'
+import KidsToggle from '@/components/KidsToggle'
 
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+export default {
+  components: { KidsToggle },
+
+  computed: {
+    ...mapState({
+      questions: state => state.questions.questions,
+    }),
+  },
+
+  async created() {
+    if (!this.questions.length) {
+      await this.setQuestions()
+    }
+  },
+
+  methods: {
+    ...mapActions({
+      setQuestions: 'questions/setQuestions',
+    }),
+  },
 }
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
-
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+</script>
+<style lang="postcss">
+html,
+body {
+  @apply w-full flex justify-center;
 }
 </style>

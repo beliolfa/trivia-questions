@@ -1,1 +1,5 @@
 export const SET_QUESTIONS = 'Set Questions'
+export const SET_ACTIVE_CATEGORY = 'Set Active Category'
+export const SET_KIDS_MODE = 'Set Kids Mode'
+export const MARK_QUESTION_AS_DONE = 'Mark Question as Done'
+export const RESET_CURRENT_CATEGORY = 'Reset Current Category'

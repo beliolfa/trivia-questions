@@ -1,9 +1,8 @@
 <template>
-  <Loading v-if="loading" />
+  <Loading v-if="loading" :color="category.color" />
+  <ResetCategory v-else-if="!question" :slug="slug" @reset="setQuestion" />
   <div v-else class="bg-white">
     <div class="max-w-screen-xl mx-auto py-12 px-4 sm:px-6 md:py-16 lg:px-8 lg:py-20">
-      <div class="mb-8 text-gray-600 cursor-pointer" @click="$router.push('/')">Volver</div>
-
       <h2
         class="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10"
       >
@@ -12,10 +11,14 @@
       <div class="mt-8 flex">
         <div class="inline-flex rounded-md shadow">
           <div
-            class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out cursor-pointer"
-            @click="reveal"
+            class="inline-flex items-center justify-center border border-transparent text-base leading-6 font-medium rounded-md text-white focus:outline-none focus:shadow-outline transition duration-150 ease-in-out cursor-pointer"
+            :class="category.color"
           >
-            Ver Solución
+            <div v-if="!revealSolution" class="px-5 py-3" @click="reveal">Ver Solución</div>
+            <div v-else class="px-5 py-3" :class="category.color" @click="setQuestion">
+              <span>Cargar otra pregunta de</span>
+              <CategoryName :category="category" />
+            </div>
           </div>
         </div>
         <div class="ml-3 inline-flex">
@@ -55,16 +58,19 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Loading from '@/components/Loading'
+import ResetCategory from '@/components/ResetCategory'
+import CategoryName from '@/components/CategoryName'
 
 export default {
   name: 'TriviaQuestion',
 
-  components: { Loading },
+  components: { Loading, ResetCategory, CategoryName },
 
   data() {
     return {
+      slug: this.$route.params.slug,
       question: {},
       loading: true,
       showHints: false,
@@ -73,24 +79,43 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      categoryBySlug: 'questions/categoryBySlug',
+    }),
+
     answers() {
       return this.question.options || [this.question.answer]
+    },
+
+    category() {
+      return this.categoryBySlug(this.slug)
     },
   },
 
   async created() {
-    this.question = await this.getRandomQuestionsBySlug(this.$route.params.slug)
-    this.loading = false
+    this.setActiveCategory(this.slug)
+    await this.setQuestion()
   },
 
   methods: {
     ...mapActions({
-      getRandomQuestionsBySlug: 'questions/getRandomQuestionsBySlug',
+      setActiveCategory: 'questions/setActiveCategory',
+      getRandomQuestion: 'questions/getRandomQuestion',
+      markQuestionAsDone: 'questions/markQuestionAsDone',
     }),
+
+    async setQuestion() {
+      this.loading = true
+      this.revealSolution = false
+      this.showHints = false
+      this.question = await this.getRandomQuestion()
+      this.loading = false
+    },
 
     reveal() {
       this.revealSolution = true
       this.showHints = true
+      this.markQuestionAsDone(this.question)
     },
   },
 }

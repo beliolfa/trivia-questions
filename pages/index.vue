@@ -1,6 +1,5 @@
 <template>
-  <div class="p-8">
-    <KidsToggle />
+  <div>
     <div class="bg-white shadow overflow-hidden sm:rounded-md mt-16">
       <ul>
         <li
@@ -21,7 +20,7 @@
                 <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                   <div>
                     <div class="text-sm leading-5 font-medium text-indigo-600 truncate">
-                      {{ category.name }}
+                      <CategoryName :category="category" />
                     </div>
                   </div>
                 </div>
@@ -35,37 +34,17 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import KidsToggle from '@/components/KidsToggle'
+import { mapState } from 'vuex'
+import CategoryName from '@/components/CategoryName'
 
 export default {
   name: 'TriviaQuestions',
 
-  components: { KidsToggle },
-
+  components: { CategoryName },
   computed: {
     ...mapState({
       categories: state => state.questions.categories,
-      questions: state => state.questions.questions,
-    }),
-  },
-
-  async created() {
-    if (!this.questions.length) {
-      await this.setQuestions()
-    }
-  },
-
-  methods: {
-    ...mapActions({
-      setQuestions: 'questions/setQuestions',
     }),
   },
 }
 </script>
-<style lang="postcss">
-html,
-body {
-  @apply w-full flex justify-center;
-}
-</style>
