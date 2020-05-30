@@ -39,6 +39,7 @@ export default {
       answer,
       options,
       id: question.id,
+      source: question.source,
     }
   },
 

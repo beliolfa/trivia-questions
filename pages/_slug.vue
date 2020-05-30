@@ -8,6 +8,9 @@
       >
         {{ question.question }}
       </h2>
+      <a :href="question.source" target="_blank" class="text-xs mt-2 text-gray-400">
+        {{ question.source }}
+      </a>
       <div class="mt-8 flex">
         <div class="inline-flex rounded-md shadow">
           <div

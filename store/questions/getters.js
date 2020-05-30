@@ -15,5 +15,7 @@ export default {
       .sort(() => Math.random() - 0.5)
   },
 
-  categoryBySlug: state => slug => state.categories.find(category => category.slug === slug) || {},
+  categoryBySlug: state => slug =>
+    state.categories.find(category => category.slug === slug && category.kids === state.kidsMode) ||
+    {},
 }
