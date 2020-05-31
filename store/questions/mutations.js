@@ -5,6 +5,7 @@ import {
   SET_KIDS_MODE,
   MARK_QUESTION_AS_DONE,
   RESET_CURRENT_CATEGORY,
+  SET_TOTALS,
 } from './mutation-types'
 
 export default {
@@ -18,6 +19,10 @@ export default {
 
   [SET_KIDS_MODE]: (state, value) => {
     state.kidsMode = value
+  },
+
+  [SET_TOTALS]: (state, totals) => {
+    state.totals = totals
   },
 
   [MARK_QUESTION_AS_DONE]: (state, question) => {

@@ -27,19 +27,19 @@ export default {
 
   computed: {
     ...mapState({
-      questions: state => state.questions.questions,
+      totals: state => state.questions.totals,
     }),
   },
 
   async created() {
-    if (!this.questions.length) {
-      await this.setQuestions()
+    if (!this.totals.length) {
+      await this.setTotals()
     }
   },
 
   methods: {
     ...mapActions({
-      setQuestions: 'questions/setQuestions',
+      setTotals: 'questions/setTotals',
     }),
   },
 }

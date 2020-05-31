@@ -4,14 +4,19 @@ import {
   SET_KIDS_MODE,
   MARK_QUESTION_AS_DONE,
   RESET_CURRENT_CATEGORY,
+  SET_TOTALS,
 } from './mutation-types'
 const he = require('he')
+import sample from 'lodash/sample'
 
 export default {
   async getRandomQuestion({ state, getters, dispatch }) {
     if (!getters.activeQuestions.length && !state.kidsMode) {
-      // Get another batch from Open Trivia
-      await dispatch('setOpenTriviaQuestionsBySlug', state.activeCategory)
+      const success = await dispatch('getFirebaseRandomQuestion')
+      if (!success && !state.kidsMode) {
+        // Get another batch from Open Trivia
+        await dispatch('setOpenTriviaQuestionsBySlug', state.activeCategory)
+      }
     }
 
     const question = getters.activeQuestions[0]
@@ -43,9 +48,20 @@ export default {
     }
   },
 
-  async setFirebaseQuestions({ commit }) {
+  async getFirebaseRandomQuestion({ commit, state, getters }) {
+    const total = getters.activeCategoryTotalQuestions
+    const idsRange = Array.from({ length: total }, (_, i) => i + 1)
+    let difference = idsRange.filter(x => !getters.answeredQuestionsIds.includes(x))
+    const uniqueId = sample(difference)
+
+    if (!uniqueId) {
+      return false
+    }
+
     await this.$fireStore
       .collection('questions')
+      .where('category', '==', state.activeCategory)
+      .where('uniqueId', '==', uniqueId)
       .get()
       .then(({ docs }) => {
         commit(
@@ -53,6 +69,7 @@ export default {
           docs.map(doc => ({ id: doc.id, language: 'es', answered: false, ...doc.data() }))
         )
       })
+    return true
   },
 
   async setOpenTriviaQuestions({ dispatch, getters }) {
@@ -96,9 +113,16 @@ export default {
     )
   },
 
-  async setQuestions({ dispatch }) {
-    await dispatch('setFirebaseQuestions')
-    await dispatch('setOpenTriviaQuestions')
+  async setTotals({ commit }) {
+    await this.$fireStore
+      .collection('totals')
+      .get()
+      .then(({ docs }) => {
+        commit(
+          SET_TOTALS,
+          docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        )
+      })
   },
 
   markQuestionAsDone({ commit }, question) {

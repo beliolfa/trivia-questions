@@ -1,4 +1,5 @@
 export default () => ({
+  totals: [],
   questions: [],
   activeCategory: null,
   kidsMode: false,
