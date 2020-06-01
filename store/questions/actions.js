@@ -11,7 +11,7 @@ import sample from 'lodash/sample'
 
 export default {
   async getRandomQuestion({ state, getters, dispatch }) {
-    if (!getters.activeQuestions.length && !state.kidsMode) {
+    if (!getters.activeQuestions.length) {
       const success = await dispatch('getFirebaseRandomQuestion')
       if (!success && !state.kidsMode) {
         // Get another batch from Open Trivia

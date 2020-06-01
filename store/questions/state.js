@@ -12,7 +12,7 @@ export default () => ({
       openTriviaIds: [22],
     },
     {
-      slug: 'geography',
+      slug: 'history-geography',
       name: 'Ciencias Sociales',
       kids: true,
       color: 'bg-blue-500',
@@ -25,7 +25,7 @@ export default () => ({
       openTriviaIds: [10, 11, 12, 13, 14, 15, 16],
     },
     {
-      slug: 'entertainment',
+      slug: 'cartoon-tv',
       name: 'Dibujos Animados',
       kids: true,
       color: 'bg-pink-500',
@@ -51,7 +51,7 @@ export default () => ({
       openTriviaIds: [25],
     },
     {
-      slug: 'art',
+      slug: 'riddle',
       name: 'Adivinanzas',
       kids: true,
       color: 'bg-yellow-800',
@@ -64,7 +64,7 @@ export default () => ({
       openTriviaIds: [17],
     },
     {
-      slug: 'science',
+      slug: 'science-kids',
       name: 'Mates y Ciencias',
       kids: true,
       color: 'bg-green-500',
@@ -77,7 +77,7 @@ export default () => ({
       openTriviaIds: [21],
     },
     {
-      slug: 'sports',
+      slug: 'sports-kids',
       name: 'Deportes',
       kids: true,
       color: 'bg-orange-500',
