@@ -11,7 +11,7 @@
       <span
         aria-hidden="true"
         class="bg-gray-200 absolute h-4 w-10 mx-auto rounded-full transition-colors ease-in-out duration-200"
-        :class="{ 'bg-indigo-600': kids, 'bg-gray-200': !kids }"
+        :class="{ 'bg-blue-500': kids, 'bg-gray-200': !kids }"
       />
       <span
         aria-hidden="true"

@@ -19,7 +19,7 @@
                 </div>
                 <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                   <div>
-                    <div class="text-sm leading-5 font-medium text-indigo-600 truncate">
+                    <div class="text-sm leading-5 font-medium text-blue-500">
                       {{ category.name }}
                     </div>
                   </div>
