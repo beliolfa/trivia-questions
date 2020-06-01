@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center">
-    <span class="mr-2">Trivia for Kids</span>
+    <span class="mr-4">Preguntas para niños</span>
     <span
       role="checkbox"
       tabindex="0"

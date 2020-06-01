@@ -91,6 +91,18 @@ export default {
     category() {
       return this.categoryBySlug(this.slug)
     },
+
+    faviconColor() {
+      const colors = {
+        'bg-blue-500': 'rgb(66, 153, 225)',
+        'bg-pink-500': 'rgb(237, 100, 166)',
+        'bg-yellow-500': 'rgb(236, 201, 75)',
+        'bg-yellow-800': 'rgb(151, 90, 22)',
+        'bg-green-500': 'rgb(72, 187, 120)',
+        'bg-orange-500': 'rgb(237, 137, 54)',
+      }
+      return colors[this.category.color] || 'rgb(66, 153, 225)'
+    },
   },
 
   async created() {
@@ -118,6 +130,27 @@ export default {
       this.showHints = true
       this.markQuestionAsDone(this.question)
     },
+  },
+
+  head() {
+    return {
+      title: this.category.name,
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          href: `data:image/svg+xml,
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  style="color: ${this.faviconColor};"
+                  xmlns="http://www.w3.org/2000/svg"
+                ><circle cx="16" cy="16" r="15.0049" fill="currentColor" /></svg>`,
+        },
+      ],
+    }
   },
 }
 </script>
